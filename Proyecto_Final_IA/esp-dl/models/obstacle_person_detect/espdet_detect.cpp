@@ -55,7 +55,7 @@ void ESPDetDetect::load_model()
 {
     switch (m_model_type) {
     case model_type_t::ESPDET_PICO_224_224_OBSTACLE_PERSON:
-#if CONFIG_FLASH_ESPDET_PICO_224_224_OBSTACLE_PERSON || CONFIG_OBSTACLE_PERSON_DETECT_MODEL_IN_SDCARD
+#if CONFIG_FLASH_ESPDET_PICO_224_224_OBSTACLE_PERSON || CONFIG_ESPDET_DETECT_MODEL_IN_SDCARD
         m_model = new espdet_detect::ESPDet("espdet_pico_224_224_obstacle_person.espdl", m_score_thr[0], m_nms_thr[0]);
 #else
         ESP_LOGE("obstacle_person_detect", "espdet_pico_224_224_obstacle_person is not selected in menuconfig.");

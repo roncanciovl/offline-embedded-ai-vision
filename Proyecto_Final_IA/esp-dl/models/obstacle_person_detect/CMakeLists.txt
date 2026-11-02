@@ -44,7 +44,7 @@ if (NOT CONFIG_ESPDET_DETECT_MODEL_IN_SDCARD)
     endif()
 
     if(CONFIG_ESPDET_DETECT_MODEL_IN_FLASH_PARTITION)
-        add_obstacle_person_target(ESPDET_DETECT_MODEL ALL DEPENDS ${packed_model})
+        add_custom_target(ESPDET_DETECT_MODEL ALL DEPENDS ${packed_model})
         add_dependencies(flash ESPDET_DETECT_MODEL)
         esptool_py_flash_to_partition(flash "espdet_det" ${packed_model})
     endif()

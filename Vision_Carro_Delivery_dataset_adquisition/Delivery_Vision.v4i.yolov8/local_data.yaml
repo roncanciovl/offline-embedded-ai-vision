@@ -1,4 +1,3 @@
-path: C:/Users/nicol/Desktop/Vision_Carro_Delivery/Delivery_Vision.v4i.yolov8
 train: train/images
 val: valid/images
 test: test/images

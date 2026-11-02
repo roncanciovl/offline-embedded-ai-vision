@@ -5,3 +5,6 @@ nvs,       data,  nvs,      0x9000,      24K,
 phy_init,  data,  phy,      0xf000,      4K,
 factory,   app,   factory,  0x010000,    8000K,
 spiffs,    data,  spiffs,   ,            1M,
+# Only needed if menuconfig -> "models: obstacle_person_detect" -> "model location" is set to
+# "flash_partition" (default is "flash_rodata"). In that case uncomment the next line:
+# espdet_det, data, spiffs,   ,            1M,
