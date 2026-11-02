@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="960" height="520" role="img" aria-labelledby="t d">
+<title id="t">Tamaño y cómputo en el ESP32-P4</title>
+<desc id="d">Barras: 1.42 MB si los parámetros fueran float32, 0.37 MB en int8 y 0.58 MB el archivo completo. Un registro de 128 bits contiene 4 valores float32 o 16 valores int8.</desc>
+<style>
+:root{--bg:#ffffff;--panel:#f6f8fa;--border:#d0d7de;--fg:#1f2328;--muted:#59636e;
+--blue:#0969da;--blue-bg:#ddf4ff;--green:#1a7f37;--green-bg:#dafbe1;--red:#cf222e;--red-bg:#ffebe9;
+--orange:#bc4c00;--orange-bg:#fff1e5;--purple:#8250df;--purple-bg:#fbefff;--grid:#d8dee4;--yellow-bg:#fff8c5}
+@media (prefers-color-scheme: dark){:root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--fg:#e6edf3;
+--muted:#9198a1;--blue:#4493f8;--blue-bg:#0c2d6b;--green:#3fb950;--green-bg:#0f3a1d;--red:#f85149;
+--red-bg:#4b1113;--orange:#db6d28;--orange-bg:#3d1f00;--purple:#ab7df8;--purple-bg:#2e1a52;--grid:#30363d;--yellow-bg:#3b2e00}}
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif;fill:var(--fg)}
+.mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
+.muted{fill:var(--muted)}
+.title{font-size:22px;font-weight:600}
+.sub{font-size:14px;fill:var(--muted)}
+.small{font-size:12px}
+.bold{font-weight:600}
+.card{fill:var(--bg);stroke:var(--border);stroke-width:1}
+.panel{fill:var(--panel);stroke:var(--border);stroke-width:1}
+.f-blue{fill:var(--blue)}.f-green{fill:var(--green)}.f-red{fill:var(--red)}.f-orange{fill:var(--orange)}.f-purple{fill:var(--purple)}
+.s-blue{stroke:var(--blue)}.s-green{stroke:var(--green)}.s-red{stroke:var(--red)}.s-orange{stroke:var(--orange)}.s-purple{stroke:var(--purple)}
+.b-blue{fill:var(--blue-bg)}.b-green{fill:var(--green-bg)}.b-red{fill:var(--red-bg)}.b-orange{fill:var(--orange-bg)}.b-purple{fill:var(--purple-bg)}
+.line{stroke:var(--muted);stroke-width:1.5;fill:none}
+.gridline{stroke:var(--grid);stroke-width:1}
+
+.bar{transform-box:fill-box;transform-origin:left center;animation:grow 12s cubic-bezier(.3,0,.2,1) infinite}
+@keyframes grow{0%{transform:scaleX(0)}12%,92%{transform:scaleX(1)}100%{transform:scaleX(1)}}
+.lane8{fill:var(--green-bg);stroke:var(--green)}
+.lane32{fill:var(--blue-bg);stroke:var(--blue)}
+.fill{animation:fill 12s steps(1,end) infinite}
+.reg{fill:none;stroke:var(--fg);stroke-width:2}
+@keyframes w6_120{0%{opacity:0}5.000%{opacity:0}6.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w6_120{animation:w6_120 12.0s linear infinite}@keyframes w9_120{0%{opacity:0}7.917%{opacity:0}9.583%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w9_120{animation:w9_120 12.0s linear infinite}@keyframes w12_120{0%{opacity:0}10.833%{opacity:0}12.500%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w12_120{animation:w12_120 12.0s linear infinite}@keyframes w16_120{0%{opacity:0}13.750%{opacity:0}15.417%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w16_120{animation:w16_120 12.0s linear infinite}@keyframes w24_120{0%{opacity:0}20.000%{opacity:0}21.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w24_120{animation:w24_120 12.0s linear infinite}@keyframes w25_120{0%{opacity:0}21.000%{opacity:0}22.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w25_120{animation:w25_120 12.0s linear infinite}@keyframes w26_120{0%{opacity:0}22.000%{opacity:0}23.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w26_120{animation:w26_120 12.0s linear infinite}@keyframes w27_120{0%{opacity:0}23.000%{opacity:0}24.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w27_120{animation:w27_120 12.0s linear infinite}@keyframes w28_120{0%{opacity:0}24.000%{opacity:0}25.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w28_120{animation:w28_120 12.0s linear infinite}@keyframes w30_120{0%{opacity:0}25.000%{opacity:0}26.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w30_120{animation:w30_120 12.0s linear infinite}@keyframes w31_120{0%{opacity:0}26.000%{opacity:0}27.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w31_120{animation:w31_120 12.0s linear infinite}@keyframes w32_120{0%{opacity:0}27.000%{opacity:0}28.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w32_120{animation:w32_120 12.0s linear infinite}@keyframes w33_120{0%{opacity:0}28.000%{opacity:0}29.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w33_120{animation:w33_120 12.0s linear infinite}@keyframes w34_120{0%{opacity:0}29.000%{opacity:0}30.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w34_120{animation:w34_120 12.0s linear infinite}@keyframes w36_120{0%{opacity:0}30.000%{opacity:0}31.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w36_120{animation:w36_120 12.0s linear infinite}@keyframes w37_120{0%{opacity:0}31.000%{opacity:0}32.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w37_120{animation:w37_120 12.0s linear infinite}@keyframes w38_120{0%{opacity:0}32.000%{opacity:0}33.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w38_120{animation:w38_120 12.0s linear infinite}@keyframes w39_120{0%{opacity:0}33.000%{opacity:0}34.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w39_120{animation:w39_120 12.0s linear infinite}@keyframes w40_120{0%{opacity:0}34.000%{opacity:0}35.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w40_120{animation:w40_120 12.0s linear infinite}@keyframes w41_120{0%{opacity:0}35.000%{opacity:0}36.667%{opacity:1}98.333%{opacity:1}100%{opacity:1}}.w41_120{animation:w41_120 12.0s linear infinite}@media (prefers-reduced-motion: reduce){*{animation:none!important}}</style>
+<rect class="card" x="0.5" y="0.5" width="959" height="519" rx="12"/>
+<text class="title" x="30" y="42">¿Por qué vale la pena? Tamaño y cómputo en el ESP32-P4</text>
+<text class="sub" x="30" y="66">Cifras calculadas del archivo espdet_pico_224_224_obstacle_person.espdl de este repositorio.</text>
+<rect class="panel" x="20" y="88" width="920" height="200" rx="10"/>
+<text x="38" y="116" class="bold">Memoria de los parámetros (353 958 = 348 852 pesos int8 + 5 106 bias int32)</text>
+<text x="238" y="157" text-anchor="end" class="small">si todo fuera float32</text>
+<rect class="bar" x="250" y="138" width="600.0" height="26" rx="4" fill="var(--blue)" style="animation-delay:0.0s"/>
+<text x="860.0" y="157" class="small bold">1.42 MB</text>
+<text x="238" y="201" text-anchor="end" class="small">int8 (como se guarda)</text>
+<rect class="bar" x="250" y="182" width="156.5" height="26" rx="4" fill="var(--green)" style="animation-delay:0.4s"/>
+<text x="416.5" y="201" class="small bold">0.37 MB  · 3.8× menos</text>
+<text x="238" y="245" text-anchor="end" class="small">archivo .espdl completo</text>
+<rect class="bar" x="250" y="226" width="244.5" height="26" rx="4" fill="var(--purple)" style="animation-delay:0.8s"/>
+<text x="504.5" y="245" class="small bold">0.58 MB  (grafo, nombres, exponentes, alineación)</text>
+<rect class="panel" x="20" y="306" width="920" height="196" rx="10"/>
+<text x="38" y="334" class="bold">Un registro vectorial de 128 bits (extensión AI/PIE del ESP32-P4) procesa en una instrucción…</text>
+<text x="146" y="382" text-anchor="end" class="small bold f-blue">float32</text>
+<g class="w6_120"><rect class="lane32" x="162.0" y="360" width="156.0" height="32" rx="3"/><text x="240.0" y="381" text-anchor="middle" class="small mono">w0</text></g>
+<g class="w9_120"><rect class="lane32" x="322.0" y="360" width="156.0" height="32" rx="3"/><text x="400.0" y="381" text-anchor="middle" class="small mono">w1</text></g>
+<g class="w12_120"><rect class="lane32" x="482.0" y="360" width="156.0" height="32" rx="3"/><text x="560.0" y="381" text-anchor="middle" class="small mono">w2</text></g>
+<g class="w16_120"><rect class="lane32" x="642.0" y="360" width="156.0" height="32" rx="3"/><text x="720.0" y="381" text-anchor="middle" class="small mono">w3</text></g>
+<rect class="reg" x="160" y="358" width="640" height="36" rx="4"/>
+<text x="816" y="382" class="bold f-blue">4 valores</text>
+<text x="146" y="442" text-anchor="end" class="small bold f-green">int8</text>
+<g class="w24_120"><rect class="lane8" x="161.5" y="420" width="37.0" height="32" rx="2"/><text x="180.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q0</text></g>
+<g class="w25_120"><rect class="lane8" x="201.5" y="420" width="37.0" height="32" rx="2"/><text x="220.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q1</text></g>
+<g class="w26_120"><rect class="lane8" x="241.5" y="420" width="37.0" height="32" rx="2"/><text x="260.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q2</text></g>
+<g class="w27_120"><rect class="lane8" x="281.5" y="420" width="37.0" height="32" rx="2"/><text x="300.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q3</text></g>
+<g class="w28_120"><rect class="lane8" x="321.5" y="420" width="37.0" height="32" rx="2"/><text x="340.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q4</text></g>
+<g class="w30_120"><rect class="lane8" x="361.5" y="420" width="37.0" height="32" rx="2"/><text x="380.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q5</text></g>
+<g class="w31_120"><rect class="lane8" x="401.5" y="420" width="37.0" height="32" rx="2"/><text x="420.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q6</text></g>
+<g class="w32_120"><rect class="lane8" x="441.5" y="420" width="37.0" height="32" rx="2"/><text x="460.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q7</text></g>
+<g class="w33_120"><rect class="lane8" x="481.5" y="420" width="37.0" height="32" rx="2"/><text x="500.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q8</text></g>
+<g class="w34_120"><rect class="lane8" x="521.5" y="420" width="37.0" height="32" rx="2"/><text x="540.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q9</text></g>
+<g class="w36_120"><rect class="lane8" x="561.5" y="420" width="37.0" height="32" rx="2"/><text x="580.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q10</text></g>
+<g class="w37_120"><rect class="lane8" x="601.5" y="420" width="37.0" height="32" rx="2"/><text x="620.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q11</text></g>
+<g class="w38_120"><rect class="lane8" x="641.5" y="420" width="37.0" height="32" rx="2"/><text x="660.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q12</text></g>
+<g class="w39_120"><rect class="lane8" x="681.5" y="420" width="37.0" height="32" rx="2"/><text x="700.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q13</text></g>
+<g class="w40_120"><rect class="lane8" x="721.5" y="420" width="37.0" height="32" rx="2"/><text x="740.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q14</text></g>
+<g class="w41_120"><rect class="lane8" x="761.5" y="420" width="37.0" height="32" rx="2"/><text x="780.0" y="441" text-anchor="middle" class="mono" style="font-size:10px">q15</text></g>
+<rect class="reg" x="160" y="418" width="640" height="36" rx="4"/>
+<text x="816" y="442" class="bold f-green">16 valores</text>
+<text x="38" y="488" class="small">4× más datos por instrucción y 4× menos memoria por mover. ESP-DL implementa Conv, Add, etc. del P4 con estas instrucciones enteras.</text>
+</svg>

@@ -12,6 +12,7 @@ Este proyecto implementa una red neuronal convolucional para la detección de ob
 5. [Guía de Compilación y Flasheo](#-guía-de-compilación-y-flasheo)
 6. [Visualización en la PC](#-visualización-en-la-pc)
 7. [Adquisición del Dataset y Preprocesamiento](#-adquisición-del-dataset-y-preprocesamiento)
+8. [Cuantización del Modelo (animaciones)](#cuantización-del-modelo)
 
 
 ---
@@ -128,3 +129,11 @@ Los datos del proyecto se capturaron y formatearon mediante el siguiente flujo d
    * `1: person` (Personas)
    * Enlace al Dataset en Roboflow Universe: [Dataset Delivery Vision](https://universe.roboflow.com/nicolass-workspace-qeu9g/delivery_vision/dataset/4)
 4. **Quantización**: El modelo entrenado en formato YOLOv8 se convirtió y quantizó en un binario compatible con la arquitectura de aceleración de hardware del ESP32-P4 (`models/obstacle_person_detect/models/p4/espdet_pico_224_224_obstacle_person.espdl`, 577 KB).
+
+---
+
+## Cuantización del Modelo
+
+En [`docs/cuantizacion/`](docs/cuantizacion/README.md) hay 8 animaciones SVG que explican cómo el modelo pasa de float32 a int8 y cómo eso se aplica en este proyecto: exponentes en potencia de 2, calibración, cuantización por canal en el ESP32-P4, una convolución calculada con los pesos reales del `.espdl` y el umbral cuantizado de la salida.
+
+![Pipeline del proyecto y punto de cuantización](docs/cuantizacion/01-pipeline-del-proyecto.svg)
