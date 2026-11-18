@@ -117,9 +117,14 @@ El firmware cambia la consola UART0 a **921600 baudios**. Antes de abrir un visu
 cd Proyecto_Final_IA/esp-dl/examples/obstacle_person_detect
 python dashboard_viewer.py
 ```
-En Windows también se puede usar `INICIAR_DASHBOARD.bat`. El dashboard muestra el video en vivo (o la imagen de SPIFFS), las cajas, los FPS y la latencia. Teclas: `S` guarda una captura en `reportes_metricas/` (ignorada por Git), `ESPACIO` pausa y `Q` sale.
+En Windows también se puede usar `INICIAR_DASHBOARD.bat`. El dashboard muestra el video en vivo (o la imagen de SPIFFS), las cajas, los FPS y la latencia. Teclas: `S` guarda una captura en `reportes_metricas/`, `ESPACIO` pausa y `Q` sale.
 
 > **Ojo con las métricas del panel:** el valor de *mAP@0.50* está fijo en el código (`map50 = 0.854`), y los contadores TP/FP/FN/TN y la lista de IoU arrancan con valores predefinidos antes de sumar las detecciones reales. Por eso no son una evaluación independiente del modelo; ver [Lo que falta medir](docs/cuantizacion/README.md#lo-que-falta-medir-en-el-proyecto).
+
+### Evidencias de prueba
+[`reportes_metricas/`](Proyecto_Final_IA/esp-dl/examples/obstacle_person_detect/reportes_metricas/) contiene 26 capturas del dashboard tomadas con la cámara OV5647 en vivo. Muestran detecciones de personas y obstáculos a unos **3,7–4 FPS (ciclo de ~250–270 ms**, según el propio panel), un tiempo distinto de los ~106 ms que cita el documento ABET. Las nuevas capturas que se guarden con `S` aparecerán en Git como archivos nuevos.
+
+![Captura del dashboard con la cámara en vivo](Proyecto_Final_IA/esp-dl/examples/obstacle_person_detect/reportes_metricas/evidencia_camera_1794922141.png)
 
 ### Opción B: `pc_viewer.py` (simple)
 ```bash

@@ -42,6 +42,3 @@ Vision_Carro_Delivery_dataset_adquisition/Img Dataset Teoria IA/
 Vision_Carro_Delivery_dataset_adquisition/Delivery_Vision.v4i.yolov8/train/
 Vision_Carro_Delivery_dataset_adquisition/Delivery_Vision.v4i.yolov8/valid/
 Vision_Carro_Delivery_dataset_adquisition/Delivery_Vision.v4i.yolov8/test/
-
-# Capturas que genera dashboard_viewer.py (tecla 'S')
-Proyecto_Final_IA/esp-dl/examples/obstacle_person_detect/reportes_metricas/
