@@ -16,8 +16,10 @@ extern "C" {
 #include "hal/uart_ll.h"
 }
 #include "esp_heap_caps.h"
+#include "esp_timer.h"
 #include <dirent.h>
 #include <string.h>
+#include <strings.h>
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -98,7 +100,7 @@ static esp_err_t mount_spiffs(void)
     ESP_LOGI(TAG, "Initializing SPIFFS...");
     esp_vfs_spiffs_conf_t conf = {};
     conf.base_path = "/spiffs";
-    conf.partition_label = NULL;
+    conf.partition_label = "spiffs";
     conf.max_files = 5;
     conf.format_if_mount_failed = false;
 
@@ -109,11 +111,21 @@ static esp_err_t mount_spiffs(void)
     }
 
     size_t total = 0, used = 0;
-    ret = esp_spiffs_info(NULL, &total, &used);
+    ret = esp_spiffs_info(conf.partition_label, &total, &used);
     if (ret == ESP_OK) {
         ESP_LOGI(TAG, "SPIFFS partition size: total: %d, used: %d", (int)total, (int)used);
     }
     return ESP_OK;
+}
+
+// True only if the file name ends with .jpg / .jpeg (case-insensitive).
+static bool is_jpeg_file(const char *name)
+{
+    const char *dot = strrchr(name, '.');
+    if (dot == nullptr) {
+        return false;
+    }
+    return strcasecmp(dot, ".jpg") == 0 || strcasecmp(dot, ".jpeg") == 0;
 }
 
 static bool init_camera(void)
@@ -475,7 +487,9 @@ static void run_camera_loop(ESPDetDetect *detect)
         img.pix_type = dl::image::DL_IMAGE_PIX_TYPE_RGB565LE;
 
         // 3. Run neural network inference on balanced frame
+        int64_t t_inf = esp_timer_get_time();
         auto &results = detect->run(img);
+        int inference_ms = (int)((esp_timer_get_time() - t_inf) / 1000);
 
         dl::image::img_t thumb_img;
         thumb_img.data = s_thumb_rgb888;
@@ -496,6 +510,9 @@ static void run_camera_loop(ESPDetDetect *detect)
         printf("  \"source\": \"camera\",\n");
         printf("  \"frame\": %lu,\n", (unsigned long)frame_index++);
         printf("  \"image\": \"live_camera_feed.jpg\",\n");
+        printf("  \"width\": %d, \"height\": %d,\n", CAM_MIPI_CSI_HRES, CAM_MIPI_CSI_VRES);
+        printf("  \"thumb_width\": %d, \"thumb_height\": %d,\n", THUMB_W, THUMB_H);
+        printf("  \"inference_ms\": %d,\n", inference_ms);
         printf("  \"image_b64\": \"%s\",\n", s_b64_buffer);
         printf("  \"detections\": [\n");
 
@@ -528,7 +545,7 @@ static void run_spiffs_loop(ESPDetDetect *detect)
 
         struct dirent* ent;
         while ((ent = readdir(dir)) != NULL) {
-            if (strstr(ent->d_name, ".jpg") != NULL || strstr(ent->d_name, ".jpeg") != NULL) {
+            if (is_jpeg_file(ent->d_name)) {
                 char filepath[300];
                 snprintf(filepath, sizeof(filepath), "/spiffs/%s", ent->d_name);
                 ESP_LOGI(TAG, "Processing %s", filepath);
@@ -539,19 +556,25 @@ static void run_spiffs_loop(ESPDetDetect *detect)
                     continue;
                 }
 
+                int64_t t_dec = esp_timer_get_time();
                 dl::image::img_t img = dl::image::sw_decode_jpeg(jpeg, dl::image::DL_IMAGE_PIX_TYPE_RGB888);
+                heap_caps_free(jpeg.data);
                 if (img.data == nullptr) {
                     ESP_LOGE(TAG, "Failed to decode %s", filepath);
-                    free(jpeg.data);
                     continue;
                 }
 
+                int64_t t_inf = esp_timer_get_time();
                 auto &results = detect->run(img);
+                int64_t t_end = esp_timer_get_time();
 
                 printf("\n>>>JSON_START<<<\n");
                 printf("{\n");
                 printf("  \"source\": \"spiffs\",\n");
                 printf("  \"image\": \"%s\",\n", ent->d_name);
+                printf("  \"width\": %d, \"height\": %d,\n", img.width, img.height);
+                printf("  \"decode_ms\": %d, \"inference_ms\": %d,\n",
+                       (int)((t_inf - t_dec) / 1000), (int)((t_end - t_inf) / 1000));
                 printf("  \"detections\": [\n");
 
                 size_t idx = 0;
@@ -565,8 +588,7 @@ static void run_spiffs_loop(ESPDetDetect *detect)
                 printf("}\n");
                 printf(">>>JSON_END<<<\n\n");
 
-                free(jpeg.data);
-                free(img.data);
+                heap_caps_free(img.data);
 
                 vTaskDelay(pdMS_TO_TICKS(1000));
             }
@@ -592,8 +614,10 @@ extern "C" void app_main(void)
 
     // Load ESP-DL Neural Network Model
     ESP_LOGI(TAG, "Loading ESP-DL Pico 224x224 Detection Model...");
-    ESPDetDetect *detect = new ESPDetDetect();
-    ESP_LOGI(TAG, "Model loaded successfully into hardware accelerator.");
+    int64_t t_load = esp_timer_get_time();
+    // lazy_load = false: load the model now instead of on the first run().
+    ESPDetDetect *detect = new ESPDetDetect(ESPDetDetect::ESPDET_PICO_224_224_OBSTACLE_PERSON, false);
+    ESP_LOGI(TAG, "Model loaded in %lld ms", (esp_timer_get_time() - t_load) / 1000);
 
     // Attempt to start the live MIPI-CSI Raspberry Pi Camera (OV5647)
     bool camera_online = init_camera();

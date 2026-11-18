@@ -4,6 +4,8 @@ This project runs an AI model on the ESP32-P4 to detect obstacles and people fro
 
 Este proyecto implementa una red neuronal en el ESP32-P4 para detectar obstaculos y personas en imagenes estaticas, y muestra los resultados en la PC.
 
+> **Update (Nov 2026) / Actualización:** the firmware now tries a live OV5647 MIPI-CSI camera first and falls back to the SPIFFS images if none is detected. The serial console runs at **921600 baud**; use `dashboard_viewer.py` or `pc_viewer.py` (both default to 921600). See the main `README.md`. / El firmware intenta primero la cámara en vivo y, si no la detecta, usa las imágenes de SPIFFS. La consola serial va a 921600 baudios; ver el `README.md` principal.
+
 ## Prerequisites
 
 1. **ESP-IDF v5.3+:** You must have ESP-IDF v5.3 or newer installed on your machine to build and flash the firmware. / Se debe descargar el ESP-IDF v5.3 desde la pagina web de Espressif, y seguir los pasos de instalacion.
