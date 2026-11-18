@@ -13,6 +13,7 @@ Este proyecto implementa una red neuronal convolucional para la detección de ob
 6. [Visualización en la PC](#-visualización-en-la-pc)
 7. [Adquisición del Dataset y Preprocesamiento](#-adquisición-del-dataset-y-preprocesamiento)
 8. [Cuantización del Modelo (animaciones)](#cuantización-del-modelo)
+9. [Intento experimental de video en vivo (`live_video_feed/`)](#intento-experimental-de-video-en-vivo-live_video_feed)
 
 
 ---
@@ -137,3 +138,19 @@ Los datos del proyecto se capturaron y formatearon mediante el siguiente flujo d
 En [`docs/cuantizacion/`](docs/cuantizacion/README.md) hay 8 animaciones SVG que explican cómo el modelo pasa de float32 a int8 y cómo eso se aplica en este proyecto: exponentes en potencia de 2, calibración, cuantización por canal en el ESP32-P4, una convolución calculada con los pesos reales del `.espdl` y el umbral cuantizado de la salida.
 
 ![Pipeline del proyecto y punto de cuantización](docs/cuantizacion/01-pipeline-del-proyecto.svg)
+
+---
+
+## Intento experimental de video en vivo (`live_video_feed/`)
+
+La carpeta [`live_video_feed/`](live_video_feed/) guarda el primer intento (mayo 2026) de capturar video en vivo con la cámara OV5647 por MIPI-CSI. Es un proyecto ESP-IDF independiente: driver propio en `main/mipi_camera.c`, bucle de inferencia en `main/main.cpp` y visualizador en `pc_visualizer/live_feed.py`. Usa el componente del modelo de `Proyecto_Final_IA/esp-dl` mediante rutas relativas.
+
+**Estado:** según su propio registro, [`live_video_feed/README_live.md`](live_video_feed/README_live.md), la cámara **no llegó a funcionar** con este código: hubo timeouts de I2C/SCCB, problemas de reloj, de alimentación y capturas negras. Se conserva como registro técnico.
+
+```bash
+cd live_video_feed
+idf.py set-target esp32p4
+idf.py build flash
+```
+
+El reporte técnico de esa etapa está en [`Reporte_Proyecto_Vision_Artificial.pdf`](Reporte_Proyecto_Vision_Artificial.pdf).

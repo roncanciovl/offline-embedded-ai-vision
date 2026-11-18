@@ -2,10 +2,14 @@
 build/
 **/build/
 sdkconfig
+**/sdkconfig
 *.old
+**/*.old
 *.temp
 dependencies.lock
+**/dependencies.lock
 managed_components/
+**/managed_components/
 .cache/
 **/.cache/
 
